@@ -6,7 +6,7 @@
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/cgi/mweb/equip/*
-// @updateURL    
+// @updateURL    https://raw.githubusercontent.com/JellyL/jbwGreasyfork/main/jbwGreasyfork.js
 // @grant        window.onurlchange
 // @run-at       document-end
 // ==/UserScript==
