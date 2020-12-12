@@ -19,6 +19,7 @@ var cssCompile = `
       .page-prod-role-list .role-list-tabs{max-width: 500px;}
       .page-role-detail .preview{max-width: 500px;}
       .c-popup{max-width: 500px;}
+      .page-tabs .tabs{max-width: 500px;}
      `
     GM_addStyle(cssCompile);
 //初始化变量
