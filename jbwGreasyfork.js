@@ -2,7 +2,7 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      0.4
+// @version      0.5
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
