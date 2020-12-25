@@ -2,7 +2,7 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      0.8
+// @version      1.0
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
@@ -11,24 +11,31 @@
 // @run-at       document-end
 // ==/UserScript==
 
+//全局藏宝阁宽度变量，如果你想藏宝阁宽度更窄，只需要更改以下变量值即可
+//maxWidth取值范围为0~750，越小界面宽度越小
+//zoomSize取值范围为0~1，越小界面整体缩放越小
+var maxWidth = 450;
+var zoomSize = 1;
+
 //变小藏宝阁最大宽度
 var cssCompile = `
-       body{max-width: 500px;}
-      .site-navbar-fixed{max-width: 500px;}
-      .site-footbar{max-width: 500px;}
-      .page-prod-role-list .role-list-tabs{max-width: 500px;}
-      .page-role-detail .preview{max-width: 500px;}
-      .c-popup{max-width: 500px;}
+       body{max-width: ${maxWidth}px;}
+      .page-app{zoom:${zoomSize};}
+      .site-navbar-fixed{max-width: ${maxWidth}px;}
+      .site-footbar{max-width: ${maxWidth}px;}
+      .page-prod-role-list .role-list-tabs{max-width: ${maxWidth}px;}
+      .page-role-detail .preview{max-width: ${maxWidth}px;}
+      .c-popup{max-width: ${maxWidth}px;}
       .page-tabs .tabs{max-width: 500px;}
-      .page-search .search-header{max-width: 500px;}
-      .c-popup-open{max-width: 500px;}
-      .index-popup-ad{max-width: 500px;}
+      .page-search .search-header{max-width: ${maxWidth}px;}
+      .c-popup-open{max-width: ${maxWidth}px;}
+      .index-popup-ad{max-width: ${maxWidth}px;}
 
      `
 GM_addStyle(cssCompile)
 //初始化变量
 var pageHeight = window.innerHeight
-var pageWidth = (window.innerWidth - 530) / 2
+var pageWidth = (window.innerWidth - maxWidth - 30) / 2
 var pagePath = location.pathname
 //初始化iframe
 var pageFrame = document.createElement('iframe')
@@ -60,7 +67,7 @@ var initial = function () {
 //根据浏览器大小变化响应
 var iframeObj = containerDiv.childNodes
 window.onresize = function () {
-  iframeObj[0].setAttribute("style",`width:${(window.innerWidth-530)/2}px;height:${window.innerHeight}px`);
+  iframeObj[0].setAttribute("style",`width:${(window.innerWidth - maxWidth - 30) / 2}px;height:${window.innerHeight}px`);
 }
 
 //油猴单页应用onurlchange检测
