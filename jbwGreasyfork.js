@@ -2,10 +2,11 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      1.1
+// @version      1.2
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
+// @exclude      https://yys.cbg.163.com/cgi/mweb/yuhun-collocation*
 // @grant        window.onurlchange
 // @grant        GM_addStyle
 // @run-at       document-end
@@ -39,6 +40,7 @@ var pageWidth = (window.innerWidth - maxWidth - 30) / 2;
 var pagePath = location.pathname;
 //初始化iframe
 var pageFrame = document.createElement("iframe");
+pageFrame.setAttribute("id", "yysjbw-iframe-tag");
 pageFrame.src = "https://yys.jellyl.com" + pagePath;
 pageFrame.frameBorder = 0;
 pageFrame.width = pageWidth + "px";
@@ -55,13 +57,14 @@ var initial = function () {
   "use strict";
 
   var pageFrameNew = document.createElement("iframe");
+  pageFrameNew.setAttribute("id", "yysjbw-iframe-tag");
   var pagePathNew = location.pathname;
   pageFrameNew.src = "https://yys.jellyl.com" + pagePathNew;
   pageFrameNew.frameBorder = 0;
   pageFrameNew.width = pageWidth + "px";
   pageFrameNew.height = pageHeight + "px";
-  var theFrame = document.getElementsByTagName("iframe");
-  containerDiv.replaceChild(pageFrameNew, theFrame[0]);
+  var theFrame = document.getElementById("yysjbw-iframe-tag");
+  containerDiv.replaceChild(pageFrameNew, theFrame);
 };
 
 //根据浏览器大小变化响应
