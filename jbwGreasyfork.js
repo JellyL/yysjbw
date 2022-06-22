@@ -2,7 +2,7 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      1.7
+// @version      1.8
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
@@ -18,7 +18,7 @@
 //全局藏宝阁宽度变量，如果你想藏宝阁宽度更窄，只需要更改以下变量值即可
 //maxWidth取值范围为0~750，越小界面宽度越小
 //zoomSize取值范围为0~1，越小界面整体缩放越小
-var maxWidth = 450;
+var maxWidth = 550;
 var zoomSize = 1;
 
 //变小藏宝阁最大宽度
@@ -37,7 +37,8 @@ var cssCompile = `
       .role-list-tabs{max-width: ${maxWidth}px !important;}
       .footer{max-width: ${maxWidth}px !important;}
       .activity-filter{max-width: ${maxWidth}px !important;}
-
+      .tabs{max-width: ${maxWidth}px !important;}
+      .root_YcRdK{max-width: ${maxWidth}px !important;}
      `;
 GM_addStyle(cssCompile);
 //初始化变量
