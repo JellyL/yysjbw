@@ -2,7 +2,7 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      1.8
+// @version      1.9
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
@@ -12,6 +12,7 @@
 // @exclude      https://yys.cbg.163.com/cgi/mweb/yuhun-collocation*
 // @grant        window.onurlchange
 // @grant        GM_addStyle
+// @grant        unsafeWindow
 // @run-at       document-end
 // ==/UserScript==
 
@@ -61,38 +62,69 @@ containerDiv.appendChild(pageFrame);
 
 //更换页面时同步更新
 var initial = function () {
-  "use strict";
+    "use strict";
 
-  var pageFrameNew = document.createElement("iframe");
-  pageFrameNew.setAttribute("id", "yysjbw-iframe-tag");
-  var pagePathNew = location.pathname;
-  pageFrameNew.src = "https://yys.jellyl.com" + pagePathNew;
-  pageFrameNew.frameBorder = 0;
-  pageFrameNew.width = pageWidth + "px";
-  pageFrameNew.height = pageHeight + "px";
-  var theFrame = document.getElementById("yysjbw-iframe-tag");
-  containerDiv.replaceChild(pageFrameNew, theFrame);
+    var pageFrameNew = document.createElement("iframe");
+    pageFrameNew.setAttribute("id", "yysjbw-iframe-tag");
+    var pagePathNew = location.pathname;
+    pageFrameNew.src = "https://yys.jellyl.com" + pagePathNew;
+    pageFrameNew.frameBorder = 0;
+    pageFrameNew.width = pageWidth + "px";
+    pageFrameNew.height = pageHeight + "px";
+    var theFrame = document.getElementById("yysjbw-iframe-tag");
+    containerDiv.replaceChild(pageFrameNew, theFrame);
 };
 
 //根据浏览器大小变化响应
 
 function resizing() {
-  var iframeObj = containerDiv.childNodes;
-  iframeObj[0].setAttribute(
-    "style",
-    `width:${(window.innerWidth - maxWidth - 30) / 2}px;height:${
-      window.innerHeight
-    }px`
-  );
+    var iframeObj = containerDiv.childNodes;
+    iframeObj[0].setAttribute(
+        "style",
+        `width:${(window.innerWidth - maxWidth - 30) / 2}px;height:${window.innerHeight
+        }px`
+    );
 }
 
 window.onresize = function () {
-  resizing();
+    resizing();
 };
+//劫持
+(function (open) {
+    XMLHttpRequest.prototype.open = function () {
+        this.addEventListener("readystatechange", function () {
+            if (this.responseURL === "https://yys.cbg.163.com/cgi/api/get_equip_detail") {
+
+                const prefab = JSON.parse(JSON.parse(this.response).equip.equip_desc).prefab_team;
+
+                // 如果你的脚本需要添加此阵容名，请添加id为no-jbw-team-name的任一元素，以防止UI冲突
+                !document.getElementById('no-jbw-team-name') && !window.NoJbwTeamName && setInterval(function () {
+                    if (!document.URL.startsWith("https://yys.cbg.163.com/cgi/mweb/equip")) {
+                        return;
+                    }
+                    if (document.getElementsByClassName('content-team').length && !document.getElementsByClassName('jbw_name').length) {
+                        const dom = document.getElementsByClassName('team-module')
+                        for (let i = 0; i < dom.length; i += 1) {
+                            var name = document.createElement("a");
+                            name.setAttribute("style", "position:absolute;transform: translateX(40px);color: black;");
+                            name.setAttribute("class", "jbw_name");
+                            name.innerText = prefab[i].name
+                            dom[i].parentNode.insertBefore(name, dom[i])
+                        }
+                    }
+                }, 500);
+            }
+        }, false);
+        open.apply(this, arguments);
+    };
+})(XMLHttpRequest.prototype.open);
+
+//劫持结束
+
 //油猴单页应用onurlchange检测
 if (window.onurlchange === null) {
-  window.addEventListener("urlchange", (info) => {
-    initial();
-    resizing();
-  });
+    window.addEventListener("urlchange", (info) => {
+        initial();
+        resizing();
+    });
 }
