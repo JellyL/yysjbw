@@ -40,6 +40,7 @@ var cssCompile = `
       .activity-filter{max-width: ${maxWidth}px !important;}
       .tabs{max-width: ${maxWidth}px !important;}
       .root_YcRdK{max-width: ${maxWidth}px !important;}
+      .noListFilter{max-width: ${maxWidth}px !important;}
      `;
 GM_addStyle(cssCompile);
 //初始化变量
