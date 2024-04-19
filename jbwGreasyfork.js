@@ -2,7 +2,7 @@
 // @name         阴阳师鉴宝屋油猴脚本
 // @namespace    https://github.com/JellyL/jbwGreasyfork
 // @icon         https://yys.jellyl.com/img/wu.8dccb370.svg
-// @version      2.0
+// @version      2.1
 // @description  在阴阳师藏宝阁页面左侧自动显示鉴宝屋结果页
 // @author       Jelly L
 // @match        https://yys.cbg.163.com/*
@@ -26,7 +26,7 @@ var zoomSize = 1;
 var cssCompile = `
        body{max-width: ${maxWidth}px;}
       .page-app{zoom:${zoomSize};}
-      .site-navbar-fixed{max-width: ${maxWidth}px;}
+      .site-navbar-fixed{max-width: ${maxWidth}px !important;}
       .site-footbar{max-width: ${maxWidth}px;}
       .page-prod-role-list .role-list-tabs{max-width: ${maxWidth}px;}
       .page-role-detail .preview{max-width: ${maxWidth}px;}
@@ -92,11 +92,14 @@ window.onresize = function () {
 };
 //劫持
 (function (open) {
-    XMLHttpRequest.prototype.open = function () {
+
+    let _open = XMLHttpRequest.prototype.open;
+    window.XMLHttpRequest.prototype.open = function () {
         this.addEventListener("readystatechange", function () {
-            if (this.responseURL === "https://yys.cbg.163.com/cgi/api/get_equip_detail") {
+            if (this.responseURL.startsWith("https://yys.cbg.163.com/cgi/api/get_equip_detail")) {
 
                 const prefab = JSON.parse(JSON.parse(this.response).equip.equip_desc).prefab_team;
+
 
                 // 如果你的脚本需要添加此阵容名，请添加id为no-jbw-team-name的任一元素，以防止UI冲突
                 !document.getElementById('no-jbw-team-name') && !window.NoJbwTeamName && setInterval(function () {
@@ -110,6 +113,7 @@ window.onresize = function () {
                             name.setAttribute("style", "position:absolute;transform: translateX(40px);color: black;");
                             name.setAttribute("class", "jbw_name");
                             name.innerText = prefab[i].name
+
                             dom[i].parentNode.insertBefore(name, dom[i])
                         }
                     }
@@ -118,9 +122,10 @@ window.onresize = function () {
         }, false);
         open.apply(this, arguments);
     };
-})(XMLHttpRequest.prototype.open);
+})(window.XMLHttpRequest.prototype.open);
 
 //劫持结束
+
 
 //油猴单页应用onurlchange检测
 if (window.onurlchange === null) {
